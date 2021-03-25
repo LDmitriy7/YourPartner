@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="ProjectModuleManager">
-    <modules>
-      <module fileurl="file://$PROJECT_DIR$/../MyFreelanceBot/.idea/MyFreelanceBot.iml" filepath="$PROJECT_DIR$/../MyFreelanceBot/.idea/MyFreelanceBot.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/YourPartner.iml" filepath="$PROJECT_DIR$/.idea/YourPartner.iml" />
-    </modules>
-  </component>
-</project>
