@@ -19,9 +19,9 @@ async def forward_from_admin(msg: types.Message, pchat_id: int):
     await msg.forward(pchat_id)
 
 
-@dp.message_handler(find_pair_chat, content_types='any')
-async def forward(msg: types.Message, pchat_id: int):
-    """Копирует все сообщения в связанную группу."""
+@dp.message_handler(find_pair_chat)
+async def forward_text(msg: types.Message, pchat_id: int):
+    """Копирует все текстовые сообщения в связанную группу."""
     username = msg.from_user.username
     lower_msg_text = msg.text.lower()
     stop_words = [
@@ -41,3 +41,9 @@ async def forward(msg: types.Message, pchat_id: int):
         await msg.answer(texts.error_phone)
     else:
         await msg.copy_to(pchat_id)
+
+
+@dp.message_handler(find_pair_chat, content_types='any')
+async def forward_any(msg: types.Message, pchat_id: int):
+    """Копирует любые сообщения в связанную группу."""
+    await msg.copy_to(pchat_id)
