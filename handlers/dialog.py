@@ -6,6 +6,7 @@ import texts
 from config import GROUP_ADMIN_ID
 from filters import find_pair_chat
 from loader import dp
+from texts.misc import STOP_WORDS
 
 
 @dp.message_handler(text_startswith='/')
@@ -24,14 +25,9 @@ async def forward_text(msg: types.Message, pchat_id: int):
     """Копирует все текстовые сообщения в связанную группу."""
     username = msg.from_user.username
     lower_msg_text = msg.text.lower()
-    stop_words = [
-        'cозвон', 'телефон', 'вайбер', 'ватсап', 'whatsapp', 'мессенджер',
-        'e-mail', 'почта', 'электронка', 'напрямую', 'ссылка', 'как найти тебя',
-        'телега', 'как найти тебя', 'telegram', '@', 't.me'
-    ]
 
-    for word in stop_words:
-        if word in lower_msg_text:
+    for word in STOP_WORDS:
+        if word.lower() in lower_msg_text:
             await msg.answer(texts.error_stop_word)
             return
 
