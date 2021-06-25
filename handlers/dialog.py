@@ -39,6 +39,16 @@ async def forward_text(msg: types.Message, pchat_id: int):
         await msg.copy_to(pchat_id)
 
 
+@dp.message_handler(find_pair_chat, content_types=types.ContentType.PINNED_MESSAGE)
+async def forward_pinned(msg: types.Message, pchat_id: int):
+    """Копирует любые сообщения в связанную группу."""
+    await dp.bot.send_message(pchat_id, '<b>Ваш собеседник закрепил сообщение:</b>')
+    new_msg = await msg.copy_to(pchat_id)
+    await dp.bot.pin_chat_message(pchat_id, new_msg.message_id)
+
+
+# media group
+
 @dp.message_handler(find_pair_chat, content_types='any')
 async def forward_any(msg: types.Message, pchat_id: int):
     """Копирует любые сообщения в связанную группу."""
