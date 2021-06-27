@@ -21,25 +21,6 @@ async def forward_from_admin(msg: types.Message, pchat_id: int):
     await msg.forward(pchat_id)
 
 
-@dp.message_handler(find_pair_chat)
-async def forward_text(msg: types.Message, pchat_id: int):
-    """Копирует все текстовые сообщения в связанную группу."""
-    username = msg.from_user.username
-    lower_msg_text = msg.text.lower()
-
-    for word in STOP_WORDS:
-        if word.lower() in lower_msg_text:
-            await msg.answer(texts.error_stop_word)
-            return
-
-    if username and username.lower() in lower_msg_text:
-        await msg.answer(texts.error_username)
-    elif re.search(r'(380)?[0-9-–() ]{9,}', lower_msg_text):
-        await msg.answer(texts.error_phone)
-    else:
-        await msg.copy_to(pchat_id)
-
-
 @dp.message_handler(find_pair_chat, ~IDFilter(dp.bot.id), content_types=types.ContentType.PINNED_MESSAGE)
 async def forward_pinned(msg: types.Message, pchat_id: int):
     await dp.bot.send_message(pchat_id, '<b>Ваш собеседник закрепил сообщение:</b>')
@@ -58,6 +39,25 @@ async def forward_reply(msg: types.Message, reply: types.Message, pchat_id: int)
     await dp.bot.send_message(pchat_id, '<b>Ваш собеседник ответил на сообщение ниже:</b>')
     new_reply = await reply.copy_to(pchat_id)
     await msg.copy_to(pchat_id, reply_to_message_id=new_reply.message_id)
+
+
+@dp.message_handler(find_pair_chat)
+async def forward_text(msg: types.Message, pchat_id: int):
+    """Копирует все текстовые сообщения в связанную группу."""
+    username = msg.from_user.username
+    lower_msg_text = msg.text.lower()
+
+    for word in STOP_WORDS:
+        if word.lower() in lower_msg_text:
+            await msg.answer(texts.error_stop_word)
+            return
+
+    if username and username.lower() in lower_msg_text:
+        await msg.answer(texts.error_username)
+    elif re.search(r'(380)?[0-9-–() ]{9,}', lower_msg_text):
+        await msg.answer(texts.error_phone)
+    else:
+        await msg.copy_to(pchat_id)
 
 
 @dp.message_handler(find_pair_chat, content_types='any')
