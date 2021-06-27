@@ -47,6 +47,19 @@ async def forward_pinned(msg: types.Message, pchat_id: int):
     await dp.bot.pin_chat_message(pchat_id, new_msg.message_id)
 
 
+@dp.edited_message_handler(find_pair_chat)
+async def forward_edited(msg: types.Message, pchat_id: int):
+    await dp.bot.send_message(pchat_id, '<b>Ваш собеседник изменил сообщение на:</b>')
+    await msg.copy_to(pchat_id)
+
+
+@dp.message_handler(find_pair_chat, is_reply=True)
+async def forward_reply(msg: types.Message, reply: types.Message, pchat_id: int):
+    await dp.bot.send_message(pchat_id, '<b>Ваш собеседник ответил на сообщение ниже:</b>')
+    new_reply = await reply.copy_to(pchat_id)
+    await msg.copy_to(pchat_id, reply_to_message_id=new_reply.message_id)
+
+
 @dp.message_handler(find_pair_chat, content_types='any')
 async def forward_any(msg: types.Message, pchat_id: int):
     """Копирует любые сообщения в связанную группу."""
